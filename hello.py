@@ -9,6 +9,7 @@ class App(tk.Frame):
     This way we can add in more than one widget to our application.
     '''
     def __init__(self, parent=None):
+        self.parent = parent
 # Attach our App to a parent widget
         super().__init__(parent)
 # Set the parent widget size
@@ -16,11 +17,13 @@ class App(tk.Frame):
 # Place our App on the screen
         self.pack()
 # Add in the rest of our widgets
-        self.add_label()
+        self.add_hello_label()
         self.add_button()
         self.add_slider()
+        self.add_counter()
+        self.add_entry()
 
-    def add_label(self):
+    def add_hello_label(self):
         '''
         Adds a Label to the bottom of our frame.
         '''
@@ -73,6 +76,40 @@ class App(tk.Frame):
 # Font size is not a property of the label, so we have
 # use the config() method
         self.hello.config(font=('Times New Roman', val))
+
+    def inc(self, event):
+        self.number['text'] = str(1+int(self.number['text']))
+
+    def dec(self, event):
+        self.number['text'] = str(-1+int(self.number['text']))
+
+    def add_counter(self):
+        '''
+        Creates a label whose value can be updated with arrow keys'
+        '''
+        self.number = tk.Label(self, text='0', font=(None, 20))
+        self.number.pack(side='bottom')
+# Root handles keyboard entry here
+        self.parent.bind('<Up>', self.inc)
+        self.parent.bind('<Down>', self.dec)
+
+    def clear_entry(self, event):
+        '''
+        Empties the entry box and prints out its contents
+        '''
+        print(self.entry.get())
+        self.entry.delete(0, 'end')
+
+    def add_entry(self):
+        '''
+        Creates an entry box.
+        '''
+        self.entry_label = tk.Label(self, text='Input')
+        self.entry_label.pack(side='left')
+        self.entry = tk.Entry(self, bd=5)
+        self.entry.pack(side='right')
+# Submit text when we hit Enter
+        self.entry.bind('<Return>', self.clear_entry)
 
 
 # An empty root widget to build our application from
